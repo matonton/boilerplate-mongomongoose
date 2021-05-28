@@ -1,5 +1,15 @@
 require('dotenv').config();
+const mongoose = require('mongoose');
 
+mongoose.connect('mongodb+srv://hoopla:XxfQnridOJlUHvkC@cluster0.jk4rw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+
+// console.log(db);
+db.on('error', () => console.error('connection error'));
+db.once('open', function() {
+  console.log("welcome to your db");
+});
 
 let Person;
 
