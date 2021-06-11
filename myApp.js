@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 
 mongoose.connect('mongodb+srv://hoopla:XxfQnridOJlUHvkC@cluster0.jk4rw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
 
-/* const db = mongoose.connection;
+const db = mongoose.connection;
 // console.log(db);
 db.on('error', () => console.error('connection error'));
 db.once('open', function() {
   console.log("welcome to your db");
-});*/
+});
 
 // build Schema
 const { Schema } = mongoose;
@@ -61,11 +61,17 @@ const findPeopleByName = (personName, done) => {
 };
 
 const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+  Person.findOne({ 'favoriteFoods': food}, function(err, result) {
+    if (err) return console.log(err);
+    done(null, result);
+  })
 };
 
 const findPersonById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findById({ '_id': personId }, function(err, result) {
+    if (err) return console.log(err);
+    done(null, result);
+  })
 };
 
 const findEditThenSave = (personId, done) => {
