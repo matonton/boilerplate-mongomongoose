@@ -31,19 +31,19 @@ const someFunc = function(done) {
 var createAndSavePerson = function(done) {
   // build document
   var silence = new Person({ name: 'Silence', age: 12, favoriteFoods: ['rags', 'weeds'] });
-  
+
   console.log(silence);
-  
+
   silence.save(function(err, data) {
     if (err) return console.error(err);
     done(null, data)
-    });
+  });
 };
 
 var arrayOfPeople = [
-  {name: "Frankie", age: 74, favoriteFoods: ["Del Taco"]},
-  {name: "Sol", age: 76, favoriteFoods: ["roast chicken"]},
-  {name: "Robert", age: 78, favoriteFoods: ["wine"]}
+  { name: "Frankie", age: 74, favoriteFoods: ["Del Taco"] },
+  { name: "Sol", age: 76, favoriteFoods: ["roast chicken"] },
+  { name: "Robert", age: 78, favoriteFoods: ["wine"] }
 ];
 
 const createManyPeople = (arrayOfPeople, done) => {
@@ -54,14 +54,14 @@ const createManyPeople = (arrayOfPeople, done) => {
 };
 
 const findPeopleByName = (personName, done) => {
-  Person.find({ 'name': personName}, function(err, result) {
+  Person.find({ 'name': personName }, function(err, result) {
     if (err) return console.log(err);
     done(null, result);
   })
 };
 
 const findOneByFood = (food, done) => {
-  Person.findOne({ 'favoriteFoods': food}, function(err, result) {
+  Person.findOne({ 'favoriteFoods': food }, function(err, result) {
     if (err) return console.log(err);
     done(null, result);
   })
@@ -76,23 +76,36 @@ const findPersonById = (personId, done) => {
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
-
-  done(null /*, data*/);
+  Person.findById(personId, function(err, person) {
+    if (err) return console.log(err);
+    
+    person.favoriteFoods.push(foodToAdd);
+    
+    person.save( function(err, updatedPerson) {
+      if (err) return console.log(err);
+      done(null, updatedPerson)
+    })
+  })
 };
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
-
-  done(null /*, data*/);
+  Person.findOneAndUpdate({ name: personName }, { age: ageToSet }, { new: true }, function(err, person) {
+    if (err) return console.log(err);
+    done(null, person);
+  })
 };
 
 const removeById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findOneAndRemove({ _id: personId }, function(err, result) {
+    if (err) return console.log(err);
+    done(null, result);
+  })
 };
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-
+  
   done(null /*, data*/);
 };
 
