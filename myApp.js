@@ -78,10 +78,10 @@ const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
   Person.findById(personId, function(err, person) {
     if (err) return console.log(err);
-    
+
     person.favoriteFoods.push(foodToAdd);
-    
-    person.save( function(err, updatedPerson) {
+
+    person.save(function(err, updatedPerson) {
       if (err) return console.log(err);
       done(null, updatedPerson)
     })
@@ -105,14 +105,23 @@ const removeById = (personId, done) => {
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-  
-  done(null /*, data*/);
+  Person.remove({ name: nameToRemove } , function(err, result) {
+    if (err) return console.log(err);
+    done(null, result);
+  })
 };
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  var query = Person.find({ favoriteFoods: foodToSearch });
+  console.log(query);
+  query.sort( { name: 1 });
+  query.limit(2);
+  query.select('name favoriteFoods');
+  query.exec(function(err, result) {
+    if(err) return console.log(err);
+    done(null, result);
+  });
 };
 
 /** **Well Done !!**
